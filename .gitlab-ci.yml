@@ -4,16 +4,20 @@ stages: [test]
 
 variables:
   MAVEN_OPTS: "-DskipITs"
-  MAVEN_CLI_OPTS: "-B -q -U"
+  MAVEN_CLI_OPTS: "-B -q -U --no-transfer-progress"
 
 cache:
-  key: "$CI_PROJECT_NAME"
+  key: "$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG"
   paths:
     - .m2/repository
 
 test:
   stage: test
   script:
+    - which bash && bash --version
+    - apt-get update && apt-get install -y dos2unix >/dev/null || true
+    - dos2unix mvnw || true
+    - chmod +x mvnw || true
     - ./mvnw -v || true
     - ./mvnw ${MAVEN_CLI_OPTS} test
   artifacts:
