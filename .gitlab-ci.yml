@@ -11,14 +11,13 @@ cache:
   paths:
     - .m2/repository
 
-before_script:
-  - dos2unix mvnw || true
-  - chmod +x mvnw || true
-  - ./mvnw -v || true
-
 test:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "push"'
   stage: test
   script:
+    - ./mvnw -v
     - ./mvnw ${MAVEN_CLI_OPTS} verify
   artifacts:
     when: always
