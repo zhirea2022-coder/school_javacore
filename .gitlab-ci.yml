@@ -4,7 +4,7 @@ stages: [test]
 
 variables:
   MAVEN_OPTS: "-DskipITs"
-  MAVEN_CLI_OPTS: "-B -q -U --no-transfer-progress -Dsurefire.printSummary=true"
+  MAVEN_CLI_OPTS: "-B -U --no-transfer-progress -Dsurefire.printSummary=true -Dsurefire.useFile=false"
 
 cache:
   key: "$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG"
@@ -12,7 +12,6 @@ cache:
     - .m2/repository
 
 before_script:
-  - apt-get update && apt-get install -y dos2unix >/dev/null || true
   - dos2unix mvnw || true
   - chmod +x mvnw || true
   - ./mvnw -v || true
