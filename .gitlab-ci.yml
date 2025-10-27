@@ -4,22 +4,23 @@ stages: [test]
 
 variables:
   MAVEN_OPTS: "-DskipITs"
-  MAVEN_CLI_OPTS: "-B -q -U --no-transfer-progress"
+  MAVEN_CLI_OPTS: "-B -q -U --no-transfer-progress -Dsurefire.printSummary=true"
 
 cache:
   key: "$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG"
   paths:
     - .m2/repository
 
+before_script:
+  - apt-get update && apt-get install -y dos2unix >/dev/null || true
+  - dos2unix mvnw || true
+  - chmod +x mvnw || true
+  - ./mvnw -v || true
+
 test:
   stage: test
   script:
-    - which bash && bash --version
-    - apt-get update && apt-get install -y dos2unix >/dev/null || true
-    - dos2unix mvnw || true
-    - chmod +x mvnw || true
-    - ./mvnw -v || true
-    - ./mvnw ${MAVEN_CLI_OPTS} test
+    - ./mvnw ${MAVEN_CLI_OPTS} verify
   artifacts:
     when: always
     reports:
