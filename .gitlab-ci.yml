@@ -1,0 +1,26 @@
+image: eclipse-temurin:21-jdk
+
+stages: [test]
+
+variables:
+  MAVEN_OPTS: "-DskipITs"
+  MAVEN_CLI_OPTS: "-B -q -U"
+
+cache:
+  key: "$CI_PROJECT_NAME"
+  paths:
+    - .m2/repository
+
+test:
+  stage: test
+  script:
+    - ./mvnw -v || true
+    - ./mvnw ${MAVEN_CLI_OPTS} test
+  artifacts:
+    when: always
+    reports:
+      junit: "**/target/surefire-reports/*.xml"
+    paths:
+      - "**/target/surefire-reports/"
+      - "**/target/site/jacoco/"
+    expire_in: 1 week
