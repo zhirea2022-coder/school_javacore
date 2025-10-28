@@ -74,6 +74,13 @@
 				<assignment.includes>**/figures/v1/**/Test**.java</assignment.includes>
 			</properties>
 		</profile>
+		<profile>
+			<id>a03</id>
+			<properties>
+				<assignment.id>-a03</assignment.id>
+				<assignment.includes>**/base/**/Test**.java</assignment.includes>
+			</properties>
+		</profile>
 	</profiles>
 	<dependencies>
 		<dependency>
