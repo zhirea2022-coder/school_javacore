@@ -1,66 +1,46 @@
 image: eclipse-temurin:21-jdk
 
-.before_tools:
-  before_script:
-    - apt-get update
-    - apt-get install -y --no-install-recommends unzip
-    - rm -rf /var/lib/apt/lists/*
-
-stages: [ test ]
+stages: [test]
 
 variables:
-  MAVEN_OPTS: "-DskipITs -Dmaven.repo.local=.m2/repository"
   MAVEN_CLI_OPTS: >-
     -B -U --no-transfer-progress
     -Dmaven.repo.local=.m2/repository
     -Dsurefire.printSummary=true -Dsurefire.useFile=false
-  TESTS_BASE: "${CI_SERVER_URL}/${CI_PROJECT_NAMESPACE}/javacore-tests/-/raw/main"
 
 cache:
   key: "$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG"
+  policy: pull-push
   paths:
     - .m2/repository
 
 .assignment:
-  extends: .before_tools
+  stage: test
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_PIPELINE_SOURCE == "web"'
-  stage: test
   script:
     - ./mvnw -v
-    - |
-      curl --fail --show-error --location \
-      -fsSL --header "PRIVATE-TOKEN: $TESTS_TOKEN" "$TESTS_BASE/${TEST_ARCHIVE}" -o tests.zip \
-    - unzip -o tests.zip -d src/test/java
-    - ./mvnw ${MAVEN_CLI_OPTS} -P ${PROFILE} -Dassignment.includes="${ASSIGNMENT_INCLUDES}" -Dreport.suffix="${REPORT_SUFFIX}" verify
-
+    - ./mvnw ${MAVEN_CLI_OPTS} -P ${PROFILE} verify
   artifacts:
     when: always
     reports:
-      junit: "target/surefire-reports/*${REPORT_SUFFIX}*.xml"
+      junit: "target/surefire-reports/*${PROFILE}*.xml"
     paths:
       - target/surefire-reports/
       - target/site/jacoco/
     expire_in: 1 week
 
 assignments:
+  extends: .assignment
   parallel:
     matrix:
       - PROFILE: "a01"
-        MOD_TAG: "introduction"
-        TEST_ARCHIVE: "tests-assignment-01.zip"
         EXISTS: "src/main/java/assignments/introduction/**"
-        ASSIGNMENT_INCLUDES: "**/introduction/**/Test**.java"
-        REPORT_SUFFIX: "*a01*"
       - PROFILE: "a02"
-        MOD_TAG: "figuresV1"
-        TEST_ARCHIVE: "tests-assignment-02.zip"
         EXISTS: "src/main/java/assignments/figures/v1/**"
-        ASSIGNMENT_INCLUDES: "**/figures/v1/**/Test**.java"
-        REPORT_SUFFIX: "*a02*"
-  extends: .assignment
+
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "teacher"'
       when: on_success
@@ -68,3 +48,20 @@ assignments:
         - "$EXISTS"
       when: on_success
     - when: never
+
+run-all:
+  stage: test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+      when: manual
+  script:
+    - ./mvnw -v
+    - ./mvnw ${MAVEN_CLI_OPTS} -P a01,a02 verify
+  artifacts:
+    when: always
+    reports:
+      junit: "target/surefire-reports/*.xml"
+    paths:
+      - target/surefire-reports/
+      - target/site/jacoco/
+    expire_in: 1 week
