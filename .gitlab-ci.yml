@@ -1,17 +1,18 @@
 image: eclipse-temurin:21-jdk
 
-stages: [test]
+stages: [ test ]
 
 variables:
   MAVEN_OPTS: "-DskipITs"
   MAVEN_CLI_OPTS: "-B -U --no-transfer-progress -Dsurefire.printSummary=true -Dsurefire.useFile=false"
+  TESTS_BASE: "${CI_SERVER_URL}/${CI_PROJECT_NAMESPACE}/javacore-tests/-/raw/main"  # поправь URL
 
 cache:
   key: "$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG"
   paths:
     - .m2/repository
 
-test:
+.assignment:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -19,12 +20,32 @@ test:
   stage: test
   script:
     - ./mvnw -v
-    - ./mvnw ${MAVEN_CLI_OPTS} verify
+    - ./mvnw ${MAVEN_CLI_OPTS} -P ${PROFILE} verify
   artifacts:
     when: always
     reports:
-      junit: "**/target/surefire-reports/*.xml"
+      junit: "target/surefire-reports/*${MOD_TAG}*.xml"
     paths:
-      - "**/target/surefire-reports/"
-      - "**/target/site/jacoco/"
+      - "target/surefire-reports/"
+      - "target/site/jacoco/"
     expire_in: 1 week
+
+assignments:
+  parallel:
+    matrix:
+      - PROFILE: "a01"
+        MOD_TAG: "a01"
+        TEST_ARCHIVE: "tests-assignment-01.zip"
+        EXISTS: "src/main/java/assignments/introduction/**"
+      - PROFILE: "a02"
+        MOD_TAG: "a02"
+        TEST_ARCHIVE: "tests-assignment-02.zip"
+        EXISTS: "src/main/java/assignments/secondAssignment/**"
+  extends: .assignment
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "teacher"'
+      when: on_success
+    - exists:
+        - "$EXISTS"
+      when: on_success
+    - when: never

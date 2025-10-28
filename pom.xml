@@ -11,7 +11,9 @@
 	<url>http://maven.apache.org</url>
 
 	<properties>
+		<assignment.id/>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<assignment.includes>**/*Test.java</assignment.includes>
 	</properties>
 
 	<build>
@@ -27,7 +29,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
+				<version>3.2.5</version>
+				<configuration>
+					<includes>
+						<include>${assignment.includes}</include>
+					</includes>
+					<reportNameSuffix>${assignment.id}</reportNameSuffix>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
@@ -50,6 +58,22 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>a01</id>
+			<properties>
+				<assignment.id>-a01</assignment.id>
+				<assignment.includes>**/a01/**/**Test.java</assignment.includes>
+			</properties>
+		</profile>
+		<profile>
+			<id>a02</id>
+			<properties>
+				<assignment.id>-a02</assignment.id>
+				<assignment.includes>**/a02/**/**Test.java</assignment.includes>
+			</properties>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
