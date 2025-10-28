@@ -68,18 +68,25 @@ summary:
   needs:
     - job: assignments
       artifacts: true
+      parallel: true
   script:
-    - echo "=== Test Summary ==="
+    - echo "=== Aggregated Test Summary ==="
     - |
-      total=$(grep -h "<testsuite " target/surefire-reports/*.xml |
-               awk -F'"' '{for(i=1;i<=NF;i++){if($i=="tests"){print $(i+2)}}}' |
-               awk '{s+=$1} END{print s}')
-      fails=$(grep -h "<testsuite " target/surefire-reports/*.xml |
-               awk -F'"' '{for(i=1;i<=NF;i++){if($i=="failures"){print $(i+2)}}}' |
-               awk '{s+=$1} END{print s}')
-      echo "Total tests: $total"
-      echo "Failures:    $fails"
-      echo "Successes:   $((total - fails))"
+      tests=$(grep -hoP 'tests="\K[0-9]+' target/surefire-reports/*.xml | awk '{s+=$1} END{print s+0}')
+      fails=$(grep -hoP 'failures="\K[0-9]+' target/surefire-reports/*.xml | awk '{s+=$1} END{print s+0}')
+      errors=$(grep -hoP 'errors="\K[0-9]+' target/surefire-reports/*.xml | awk '{s+=$1} END{print s+0}')
+      skipped=$(grep -hoP 'skipped="\K[0-9]+' target/surefire-reports/*.xml | awk '{s+=$1} END{print s+0}')
+      passed=$((tests - fails - errors - skipped))
+      echo "Total tests:  $tests"
+      echo "Failures:     $fails"
+      echo "Errors:       $errors"
+      echo "Skipped:      $skipped"
+      echo "Successes:    $passed"
+      if [ "$fails" -gt 0 ] || [ "$errors" -gt 0 ]; then
+        echo "❌ Some tests failed!"
+      else
+        echo "✅ All tests passed!"
+      fi
   artifacts:
     when: always
     paths:
