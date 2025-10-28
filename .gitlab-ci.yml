@@ -3,7 +3,7 @@ image: eclipse-temurin:21-jdk
 stages: [ test ]
 
 variables:
-  MAVEN_OPTS: "-DskipITs"
+  MAVEN_OPTS: "-DskipITs -Dmaven.repo.local=.m2/repository"
   MAVEN_CLI_OPTS: "-B -U --no-transfer-progress -Dsurefire.printSummary=true -Dsurefire.useFile=false"
   TESTS_BASE: "${CI_SERVER_URL}/${CI_PROJECT_NAMESPACE}/javacore-tests/-/raw/main"
 
@@ -20,14 +20,18 @@ cache:
   stage: test
   script:
     - ./mvnw -v
-    - ./mvnw ${MAVEN_CLI_OPTS} -P ${PROFILE} verify
+    - |
+      curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" -L "$TESTS_BASE/${TEST_ARCHIVE}" -o tests.zip
+    - unzip -o tests.zip -d src/test/java
+    - ./mvnw ${MAVEN_CLI_OPTS} -P ${PROFILE} -Dassignment.includes="${ASSIGNMENT_INCLUDES}" -Dreport.suffix="${REPORT_SUFFIX}" verify
+
   artifacts:
     when: always
     reports:
-      junit: "target/surefire-reports/*${MOD_TAG}*.xml"
+      junit: "target/surefire-reports/*${REPORT_SUFFIX}*.xml"
     paths:
-      - "target/surefire-reports/"
-      - "target/site/jacoco/"
+      - target/surefire-reports/
+      - target/site/jacoco/
     expire_in: 1 week
 
 assignments:
@@ -37,10 +41,14 @@ assignments:
         MOD_TAG: "introduction"
         TEST_ARCHIVE: "tests-assignment-01.zip"
         EXISTS: "src/main/java/assignments/introduction/**"
+        ASSIGNMENT_INCLUDES: "**/introduction/**/Test**.java"
+        REPORT_SUFFIX: "introduction"
       - PROFILE: "a02"
         MOD_TAG: "figuresV1"
         TEST_ARCHIVE: "tests-assignment-02.zip"
         EXISTS: "src/main/java/assignments/figures/v1/**"
+        ASSIGNMENT_INCLUDES: "**/figures/v1/**/Test**.java"
+        REPORT_SUFFIX: "figuresV1"
   extends: .assignment
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "teacher"'

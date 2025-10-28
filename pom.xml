@@ -12,6 +12,7 @@
 
 	<properties>
 		<assignment.id/>
+		<report.suffix/>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<assignment.includes>**/*Test.java</assignment.includes>
 	</properties>
@@ -34,7 +35,7 @@
 					<includes>
 						<include>${assignment.includes}</include>
 					</includes>
-					<reportNameSuffix>${assignment.id}</reportNameSuffix>
+					<reportNameSuffix>${report.suffix}</reportNameSuffix>
 				</configuration>
 			</plugin>
 			<plugin>
