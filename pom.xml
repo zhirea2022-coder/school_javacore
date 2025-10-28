@@ -63,14 +63,14 @@
 			<id>a01</id>
 			<properties>
 				<assignment.id>-a01</assignment.id>
-				<assignment.includes>**/a01/**/**Test.java</assignment.includes>
+				<assignment.includes>**/introduction/**/**Test.java</assignment.includes>
 			</properties>
 		</profile>
 		<profile>
 			<id>a02</id>
 			<properties>
 				<assignment.id>-a02</assignment.id>
-				<assignment.includes>**/a02/**/**Test.java</assignment.includes>
+				<assignment.includes>**/figures/v1/**/**Test.java</assignment.includes>
 			</properties>
 		</profile>
 	</profiles>

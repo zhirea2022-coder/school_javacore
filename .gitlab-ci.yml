@@ -5,7 +5,7 @@ stages: [ test ]
 variables:
   MAVEN_OPTS: "-DskipITs"
   MAVEN_CLI_OPTS: "-B -U --no-transfer-progress -Dsurefire.printSummary=true -Dsurefire.useFile=false"
-  TESTS_BASE: "${CI_SERVER_URL}/${CI_PROJECT_NAMESPACE}/javacore-tests/-/raw/main"  # поправь URL
+  TESTS_BASE: "${CI_SERVER_URL}/${CI_PROJECT_NAMESPACE}/javacore-tests/-/raw/main"
 
 cache:
   key: "$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG"
@@ -34,13 +34,13 @@ assignments:
   parallel:
     matrix:
       - PROFILE: "a01"
-        MOD_TAG: "a01"
+        MOD_TAG: "introduction"
         TEST_ARCHIVE: "tests-assignment-01.zip"
         EXISTS: "src/main/java/assignments/introduction/**"
       - PROFILE: "a02"
-        MOD_TAG: "a02"
+        MOD_TAG: "figuresV1"
         TEST_ARCHIVE: "tests-assignment-02.zip"
-        EXISTS: "src/main/java/assignments/secondAssignment/**"
+        EXISTS: "src/main/java/assignments/figures/v1/**"
   extends: .assignment
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "teacher"'
