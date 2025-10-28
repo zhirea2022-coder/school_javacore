@@ -21,8 +21,25 @@ cache:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_PIPELINE_SOURCE == "web"'
   script:
+    - set -euxo pipefail
     - ./mvnw -v
     - ./mvnw ${MAVEN_CLI_OPTS} -P ${PROFILE} verify
+
+    # Диагностика: что нашлось и что создалось
+    - echo "== Contents of src/test/java (top 50) =="
+    - 'find src/test/java -type f | sed -n "1,50p" || true'
+    - echo "== Surefire reports (if any) =="
+    - 'find target/surefire-reports -maxdepth 1 -type f -name "*.xml" -printf "%f\n" 2>/dev/null || true'
+    - echo "== JaCoCo (if any) =="
+    - 'ls -la target/site/jacoco 2>/dev/null || true'
+
+    # Fallback: чтобы не было WARNING/ERROR "No files to upload"
+    - mkdir -p target/surefire-reports target/site/jacoco
+    - |
+      if ! find target/surefire-reports -maxdepth 1 -name "*.xml" -print -quit >/dev/null; then
+        echo '<testsuite name="empty" tests="0" failures="0" errors="0" skipped="0"></testsuite>' \
+          > "target/surefire-reports/EMPTY-${PROFILE}.xml"
+      fi
   artifacts:
     when: always
     reports:
@@ -40,7 +57,6 @@ assignments:
         EXISTS: "src/main/java/assignments/introduction/**"
       - PROFILE: "a02"
         EXISTS: "src/main/java/assignments/figures/v1/**"
-
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "teacher"'
       when: on_success
@@ -49,14 +65,22 @@ assignments:
       when: on_success
     - when: never
 
+# Опционально: сводный прогон для препода
 run-all:
   stage: test
   rules:
     - if: '$CI_PIPELINE_SOURCE == "web"'
       when: manual
   script:
+    - set -euxo pipefail
     - ./mvnw -v
     - ./mvnw ${MAVEN_CLI_OPTS} -P a01,a02 verify
+    - mkdir -p target/surefire-reports target/site/jacoco
+    - |
+      if ! find target/surefire-reports -maxdepth 1 -name "*.xml" -print -quit >/dev/null; then
+        echo '<testsuite name="empty" tests="0" failures="0" errors="0" skipped="0"></testsuite>' \
+          > "target/surefire-reports/EMPTY-all.xml"
+      fi
   artifacts:
     when: always
     reports:
