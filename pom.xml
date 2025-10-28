@@ -15,6 +15,7 @@
 		<report.suffix/>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<assignment.includes>**/*Test.java</assignment.includes>
+		<assignment.excludes/>
 	</properties>
 
 	<build>
@@ -35,6 +36,9 @@
 					<includes>
 						<include>${assignment.includes}</include>
 					</includes>
+					<excludes>
+						<exclude>${assignment.excludes}</exclude>
+					</excludes>
 					<reportNameSuffix>${report.suffix}</reportNameSuffix>
 				</configuration>
 			</plugin>
