@@ -1,6 +1,6 @@
 image: eclipse-temurin:21-jdk
 
-stages: [test]
+stages: [test, summary]
 
 variables:
   MAVEN_CLI_OPTS: >-
