@@ -1,5 +1,11 @@
 image: eclipse-temurin:21-jdk
 
+.before_tools:
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends unzip
+    - rm -rf /var/lib/apt/lists/*
+
 stages: [ test ]
 
 variables:
@@ -13,6 +19,7 @@ cache:
     - .m2/repository
 
 .assignment:
+  extends: .before_tools
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -21,7 +28,9 @@ cache:
   script:
     - ./mvnw -v
     - |
-      curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" -L "$TESTS_BASE/${TEST_ARCHIVE}" -o tests.zip
+      curl --fail --show-error --location \
+      --header "JOB-TOKEN: $CI_JOB_TOKEN" \
+      "$TESTS_BASE/${TEST_ARCHIVE}" -o tests.zip
     - unzip -o tests.zip -d src/test/java
     - ./mvnw ${MAVEN_CLI_OPTS} -P ${PROFILE} -Dassignment.includes="${ASSIGNMENT_INCLUDES}" -Dreport.suffix="${REPORT_SUFFIX}" verify
 
