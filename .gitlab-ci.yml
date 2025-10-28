@@ -68,15 +68,21 @@ summary:
   needs:
     - job: assignments
       artifacts: true
-      parallel: true
   script:
     - echo "=== Aggregated Test Summary ==="
     - |
-      tests=$(grep -hoP 'tests="\K[0-9]+' target/surefire-reports/*.xml | awk '{s+=$1} END{print s+0}')
+      if ! ls target/surefire-reports/*.xml >/dev/null 2>&1; then
+        echo "No surefire XML reports found under target/surefire-reports/"
+        echo "Did the assignments jobs produce artifacts?"
+        exit 0
+      fi
+
+      tests=$(grep -hoP 'tests="\K[0-9]+'    target/surefire-reports/*.xml | awk '{s+=$1} END{print s+0}')
       fails=$(grep -hoP 'failures="\K[0-9]+' target/surefire-reports/*.xml | awk '{s+=$1} END{print s+0}')
-      errors=$(grep -hoP 'errors="\K[0-9]+' target/surefire-reports/*.xml | awk '{s+=$1} END{print s+0}')
+      errors=$(grep -hoP 'errors="\K[0-9]+'   target/surefire-reports/*.xml | awk '{s+=$1} END{print s+0}')
       skipped=$(grep -hoP 'skipped="\K[0-9]+' target/surefire-reports/*.xml | awk '{s+=$1} END{print s+0}')
       passed=$((tests - fails - errors - skipped))
+
       echo "Total tests:  $tests"
       echo "Failures:     $fails"
       echo "Errors:       $errors"
