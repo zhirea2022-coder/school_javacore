@@ -81,6 +81,13 @@
 				<assignment.includes>**/base/**/Test**.java</assignment.includes>
 			</properties>
 		</profile>
+		<profile>
+			<id>a04</id>
+			<properties>
+				<assignment.id>-a04</assignment.id>
+				<assignment.includes>**/figures/v1/**/TestColored**.java</assignment.includes>
+			</properties>
+		</profile>
 	</profiles>
 	<dependencies>
 		<dependency>
