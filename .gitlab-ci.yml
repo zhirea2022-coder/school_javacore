@@ -41,7 +41,7 @@ cache:
   artifacts:
     when: always
     reports:
-      junit: "target/surefire-reports/*${PROFILE}*.xml"
+      junit: "target/surefire-reports/TEST-*.xml"
     paths:
       - target/surefire-reports/
       - target/site/jacoco/
