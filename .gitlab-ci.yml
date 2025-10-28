@@ -63,27 +63,24 @@ assignments:
       when: on_success
     - when: never
 
-# Опционально: сводный прогон для препода
-run-all:
-  stage: test
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "web"'
-      when: manual
+summary:
+  stage: summary
+  needs:
+    - job: assignments
+      artifacts: true
   script:
-    - set -euxo pipefail
-    - ./mvnw -v
-    - ./mvnw ${MAVEN_CLI_OPTS} -P a01,a02 verify
-    - mkdir -p target/surefire-reports target/site/jacoco
+    - echo "=== Test Summary ==="
     - |
-      if ! find target/surefire-reports -maxdepth 1 -name "*.xml" -print -quit >/dev/null; then
-        echo '<testsuite name="empty" tests="0" failures="0" errors="0" skipped="0"></testsuite>' \
-          > "target/surefire-reports/EMPTY-all.xml"
-      fi
+      total=$(grep -h "<testsuite " target/surefire-reports/*.xml |
+               awk -F'"' '{for(i=1;i<=NF;i++){if($i=="tests"){print $(i+2)}}}' |
+               awk '{s+=$1} END{print s}')
+      fails=$(grep -h "<testsuite " target/surefire-reports/*.xml |
+               awk -F'"' '{for(i=1;i<=NF;i++){if($i=="failures"){print $(i+2)}}}' |
+               awk '{s+=$1} END{print s}')
+      echo "Total tests: $total"
+      echo "Failures:    $fails"
+      echo "Successes:   $((total - fails))"
   artifacts:
     when: always
-    reports:
-      junit: "target/surefire-reports/TEST-*.xml"
     paths:
       - target/surefire-reports/
-      - target/site/jacoco/
-    expire_in: 1 week
