@@ -25,7 +25,6 @@ cache:
     - ./mvnw -v
     - ./mvnw ${MAVEN_CLI_OPTS} -P ${PROFILE} verify
 
-    # Диагностика: что нашлось и что создалось
     - echo "== Contents of src/test/java (top 50) =="
     - 'find src/test/java -type f | sed -n "1,50p" || true'
     - echo "== Surefire reports (if any) =="
@@ -33,7 +32,6 @@ cache:
     - echo "== JaCoCo (if any) =="
     - 'ls -la target/site/jacoco 2>/dev/null || true'
 
-    # Fallback: чтобы не было WARNING/ERROR "No files to upload"
     - mkdir -p target/surefire-reports target/site/jacoco
     - |
       if ! find target/surefire-reports -maxdepth 1 -name "*.xml" -print -quit >/dev/null; then
