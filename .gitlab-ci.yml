@@ -83,8 +83,8 @@ run-all:
       fi
   artifacts:
     when: always
-    reports:
-      junit: "target/surefire-reports/*.xml"
+  reports:
+    junit: "target/surefire-reports/TEST-*.xml"
     paths:
       - target/surefire-reports/
       - target/site/jacoco/
