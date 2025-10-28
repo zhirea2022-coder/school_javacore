@@ -72,6 +72,7 @@
 			<properties>
 				<assignment.id>-a02</assignment.id>
 				<assignment.includes>**/figures/v1/**/Test**.java</assignment.includes>
+				<assignment.excludes>**/figures/v1/**/TestColored*.java</assignment.excludes>
 			</properties>
 		</profile>
 		<profile>
