@@ -1,4 +1,4 @@
-package assignments.misc;
+package assignments.misc.v2;
 
 import assignments.figures.v2.Point;
 import assignments.iface.v2.Colored;

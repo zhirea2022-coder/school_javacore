@@ -1,4 +1,4 @@
-package assignments.misc;
+package assignments.misc.v2;
 
 import assignments.iface.v2.HasArea;
 import assignments.iface.v2.Resizable;

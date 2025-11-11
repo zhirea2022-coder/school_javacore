@@ -1,5 +1,6 @@
 package assignments.misc;
 
+import assignments.misc.v2.ResizableImage;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
