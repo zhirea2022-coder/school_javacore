@@ -1,4 +1,6 @@
-package assignments.figures.v2;
+package assignments.figures.v3;
+
+import java.util.Objects;
 
 class Circle extends Figure {
     private Point center;

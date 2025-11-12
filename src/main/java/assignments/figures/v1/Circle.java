@@ -5,19 +5,16 @@ class Circle {
     private int radius;
 
     public Circle(Point center, int radius) {
-        if (radius <= 0) throw new IllegalArgumentException("Radius must be positive");
         this.center = center;
         this.radius = radius;
     }
 
     public Circle(int xCenter, int yCenter, int radius) {
-        if (radius <= 0) throw new IllegalArgumentException("Radius must be positive");
         this.center = new Point(xCenter, yCenter);
         this.radius = radius;
     }
 
     public Circle(int radius) {
-        if (radius <= 0) throw new IllegalArgumentException("Radius must be positive");
         this.center = new Point(0, 0);
         this.radius = radius;
     }
@@ -40,7 +37,6 @@ class Circle {
     }
 
     public void setRadius(int radius) {
-        if (radius <= 0) throw new IllegalArgumentException("Radius must be positive");
         this.radius = radius;
     }
 
@@ -57,7 +53,6 @@ class Circle {
     }
 
     public void resize(double ratio) {
-        if (ratio <= 0) throw new IllegalArgumentException("Ratio must be positive");
         radius = (int) (radius * ratio);
     }
 

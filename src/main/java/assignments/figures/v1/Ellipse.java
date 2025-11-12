@@ -6,7 +6,6 @@ class Ellipse {
     private int yAxis;
 
     public Ellipse(Point center, int xAxis, int yAxis) {
-        if (xAxis <= 0 || yAxis <= 0) throw new IllegalArgumentException("Axes must be positive");
         this.center = center;
         this.xAxis = xAxis;
         this.yAxis = yAxis;
@@ -37,12 +36,10 @@ class Ellipse {
     }
 
     public void setXAxis(int xAxis) {
-        if (xAxis <= 0) throw new IllegalArgumentException("XAxis must be positive");
         this.xAxis = xAxis;
     }
 
     public void setYAxis(int yAxis) {
-        if (yAxis <= 0) throw new IllegalArgumentException("YAxis must be positive");
         this.yAxis = yAxis;
     }
 
@@ -63,13 +60,11 @@ class Ellipse {
     }
 
     public void resize(double ratio) {
-        if (ratio <= 0) throw new IllegalArgumentException("Ratio must be positive");
         xAxis = (int) (xAxis * ratio);
         yAxis = (int) (yAxis * ratio);
     }
 
     public void stretch(double xRatio, double yRatio) {
-        if (xRatio <= 0 || yRatio <= 0) throw new IllegalArgumentException("Ratios must be positive");
         xAxis = (int) (xAxis * xRatio);
         yAxis = (int) (yAxis * yRatio);
     }

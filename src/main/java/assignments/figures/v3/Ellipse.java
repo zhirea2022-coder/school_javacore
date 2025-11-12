@@ -1,6 +1,6 @@
-package assignments.figures.v2;
+package assignments.figures.v3;
 
-import assignments.iface.v2.Stretchable;
+import assignments.iface.v3.Stretchable;
 
 class Ellipse extends Figure implements Stretchable{
     private Point center;

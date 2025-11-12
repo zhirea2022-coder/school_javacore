@@ -1,8 +1,8 @@
-package assignments.figures.v2;
+package assignments.figures.v3;
 
-import assignments.iface.v2.HasArea;
-import assignments.iface.v2.Movable;
-import assignments.iface.v2.Resizable;
+import assignments.iface.v3.HasArea;
+import assignments.iface.v3.Movable;
+import assignments.iface.v3.Resizable;
 
 public abstract class Figure implements Movable, Resizable, HasArea {
 

@@ -1,7 +1,6 @@
-package assignments.misc;
+package assignments.misc.v3;
 
-import assignments.figures.v2.Point;
-import assignments.misc.v2.MovableLabel;
+import assignments.figures.v3.Point;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

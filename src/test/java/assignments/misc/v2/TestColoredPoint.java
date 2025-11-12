@@ -1,7 +1,6 @@
-package assignments.misc;
+package assignments.misc.v2;
 
 import assignments.figures.v2.Point;
-import assignments.misc.v2.ColoredPoint;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

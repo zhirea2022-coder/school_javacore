@@ -5,19 +5,16 @@ class Square {
     private int size;
 
     public Square(Point leftTop, int size) {
-        if (size <= 0) throw new IllegalArgumentException("Size must be positive");
         this.topLeft = leftTop;
         this.size = size;
     }
 
     public Square(int xLeft, int yTop, int size) {
-        if (size <= 0) throw new IllegalArgumentException("Size must be positive");
         this.topLeft = new Point(xLeft, yTop);
         this.size = size;
     }
 
     public Square(int size) {
-        if (size <= 0) throw new IllegalArgumentException("Size must be positive");
         this.topLeft = new Point(0, -10);
         this.size = size;
     }
@@ -56,7 +53,6 @@ class Square {
     }
 
     public void resize(double ratio) {
-        if (ratio <= 0) throw new IllegalArgumentException("Ratio must be positive");
         size = (int) (size * ratio);
     }
 
