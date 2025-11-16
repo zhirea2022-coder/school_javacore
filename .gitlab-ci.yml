@@ -63,7 +63,7 @@ assignments:
         EXISTS: "src/main/java/assignments/**/v2/**"
       - PROFILE: "a06"
         EXISTS: "src/main/java/assignments/**/v3/**"
-      - PROFILE: "a06"
+      - PROFILE: "a07"
         EXISTS: "src/main/java/assignments/boxes/v3/**"
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "teacher"'
