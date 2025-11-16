@@ -2,7 +2,7 @@ package assignments.figures.v3;
 
 import assignments.iface.v3.Stretchable;
 
-class Rectangle extends Figure implements Stretchable {
+public class Rectangle extends Figure implements Stretchable {
     private Point topLeft;
     private Point bottomRight;
 

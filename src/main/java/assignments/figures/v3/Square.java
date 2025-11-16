@@ -1,6 +1,6 @@
 package assignments.figures.v3;
 
-class Square extends Figure {
+public class Square extends Figure {
     private Point topLeft;
     private int size;
 

@@ -140,6 +140,14 @@
 			<properties>
 				<assignment.id>-a06</assignment.id>
 				<assignment.includes>**/v3/**/Test**.java</assignment.includes>
+				<assignment.excludes>**boxes/v3/**/Test**.java</assignment.excludes>
+			</properties>
+		</profile>
+		<profile>
+			<id>a07</id>
+			<properties>
+				<assignment.id>-a07</assignment.id>
+				<assignment.includes>**boxes/v3/**/Test**.java</assignment.includes>
 			</properties>
 		</profile>
 	</profiles>

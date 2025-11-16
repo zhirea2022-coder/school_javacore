@@ -2,7 +2,7 @@ package assignments.figures.v3;
 
 import assignments.iface.v3.Stretchable;
 
-class Ellipse extends Figure implements Stretchable{
+public class Ellipse extends Figure implements Stretchable{
     private Point center;
     private int xAxis;
     private int yAxis;
