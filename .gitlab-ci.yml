@@ -72,7 +72,6 @@ assignments:
         - "$EXISTS"
       when: on_success
     - when: never
-
   script:
     - |
       if [ "$PROFILE" = "a06" ]; then
