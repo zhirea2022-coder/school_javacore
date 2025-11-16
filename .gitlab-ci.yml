@@ -87,7 +87,8 @@ assignments:
           exit 1
         fi
       fi
-    - mvn -P${PROFILE} test
+    - ./mvnw -P${PROFILE} test
+
 
 summary:
   stage: summary
