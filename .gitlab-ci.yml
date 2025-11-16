@@ -74,19 +74,37 @@ assignments:
     - when: never
   script:
     - |
-      if [ "$PROFILE" = "a06" ]; then
-        echo "Checking that both figures.v3 and misc.v3 are implemented..."
-        if ! ls src/main/java/assignments/figures/v3/*.java >/dev/null 2>&1; then
-          echo "ERROR: src/main/java/assignments/figures/v3/*.java not found."
-          echo "You must implement figures.v3 classes for assignment 6."
-          exit 1
-        fi
-        if ! ls src/main/java/assignments/misc/v3/*.java >/dev/null 2>&1; then
-          echo "ERROR: src/main/java/assignments/misc/v3/*.java not found."
-          echo "You must implement misc.v3 classes for assignment 6."
-          exit 1
-        fi
-      fi
+      case "$PROFILE" in
+        "a05")
+          echo "Checking that both figures.v2 and misc.v2 are implemented..."
+          if ! ls src/main/java/assignments/figures/v2/*.java >/dev/null 2>&1; then
+            echo "ERROR: src/main/java/assignments/figures/v2/*.java not found."
+            echo "You must implement figures.v2 classes for assignment 5."
+            exit 1
+          fi
+          if ! ls src/main/java/assignments/misc/v2/*.java >/dev/null 2>&1; then
+            echo "ERROR: src/main/java/assignments/misc/v2/*.java not found."
+            echo "You must implement misc.v2 classes for assignment 5."
+            exit 1
+          fi
+          ;;
+        "a06")
+          echo "Checking that both figures.v3 and misc.v3 are implemented..."
+          if ! ls src/main/java/assignments/figures/v3/*.java >/dev/null 2>&1; then
+            echo "ERROR: src/main/java/assignments/figures/v3/*.java not found."
+            echo "You must implement figures.v3 classes for assignment 6."
+            exit 1
+          fi
+          if ! ls src/main/java/assignments/misc/v3/*.java >/dev/null 2>&1; then
+            echo "ERROR: src/main/java/assignments/misc/v3/*.java not found."
+            echo "You must implement misc.v3 classes for assignment 6."
+            exit 1
+          fi
+          ;;
+        *)
+          echo "No extra checks for PROFILE=$PROFILE"
+          ;;
+      esac
     - ./mvnw -P${PROFILE} test
 
 
