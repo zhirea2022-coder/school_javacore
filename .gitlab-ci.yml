@@ -73,6 +73,23 @@ assignments:
       when: on_success
     - when: never
 
+  script:
+    - |
+      if [ "$PROFILE" = "a06" ]; then
+        echo "Checking that both figures.v3 and misc.v3 are implemented..."
+        if ! ls src/main/java/assignments/figures/v3/*.java >/dev/null 2>&1; then
+          echo "ERROR: src/main/java/assignments/figures/v3/*.java not found."
+          echo "You must implement figures.v3 classes for assignment 6."
+          exit 1
+        fi
+        if ! ls src/main/java/assignments/misc/v3/*.java >/dev/null 2>&1; then
+          echo "ERROR: src/main/java/assignments/misc/v3/*.java not found."
+          echo "You must implement misc.v3 classes for assignment 6."
+          exit 1
+        fi
+      fi
+    - mvn -P${PROFILE} test
+
 summary:
   stage: summary
   needs:
