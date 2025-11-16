@@ -147,7 +147,7 @@
 			<id>a07</id>
 			<properties>
 				<assignment.id>-a07</assignment.id>
-				<assignment.includes>**boxes/v3/**/Test**.java</assignment.includes>
+				<assignment.includes>**boxes/v3/Test**.java</assignment.includes>
 			</properties>
 		</profile>
 	</profiles>
