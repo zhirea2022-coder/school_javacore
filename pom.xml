@@ -159,7 +159,7 @@
 			<id>a08</id>
 			<properties>
 				<assignment.id>-a08</assignment.id>
-				<assignment.includes>**ttSchool/Test**.java</assignment.includes>
+				<assignment.includes>**ttschool/Test**.java</assignment.includes>
 			</properties>
 		</profile>
 		<profile>
