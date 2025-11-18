@@ -48,6 +48,11 @@
 			<artifactId>junit-vintage-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.9.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -155,6 +160,13 @@
 			<properties>
 				<assignment.id>-a08</assignment.id>
 				<assignment.includes>**ttSchool/Test**.java</assignment.includes>
+			</properties>
+		</profile>
+		<profile>
+			<id>a09</id>
+			<properties>
+				<assignment.id>-a09</assignment.id>
+				<assignment.includes>**file/Test**.java</assignment.includes>
 			</properties>
 		</profile>
 	</profiles>
