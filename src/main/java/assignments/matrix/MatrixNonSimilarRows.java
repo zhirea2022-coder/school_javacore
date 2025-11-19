@@ -1,9 +1,6 @@
 package assignments.matrix;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MatrixNonSimilarRows {
 
@@ -24,6 +21,6 @@ public class MatrixNonSimilarRows {
             uniqueRows.putIfAbsent(setOfRowNumbers, row);
         }
 
-        return new HashSet<>(uniqueRows.values());
+        return new LinkedHashSet<>(uniqueRows.values());
     }
 }
