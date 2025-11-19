@@ -169,5 +169,20 @@
 				<assignment.includes>**file/Test**.java</assignment.includes>
 			</properties>
 		</profile>
+		<profile>
+			<id>a10school</id>
+			<properties>
+				<assignment.id>-a10school</assignment.id>
+				<assignment.includes>**ttschool/Test**.java</assignment.includes>
+				<assignment.excludes>**ttschool/TestTrainee.java</assignment.excludes>
+			</properties>
+		</profile>
+		<profile>
+			<id>a10matrix</id>
+			<properties>
+				<assignment.id>-a10matrix</assignment.id>
+				<assignment.includes>**matrix/Test**.java</assignment.includes>
+			</properties>
+		</profile>
 	</profiles>
 </project>

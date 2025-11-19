@@ -58,7 +58,7 @@ assignments:
       - PROFILE: "a03"
         EXISTS: "src/main/java/assignments/base/**"
       - PROFILE: "a04"
-        EXISTS: "src/main/java/assignments/figures/v1/TestColored**.java**"
+        EXISTS: "src/main/java/assignments/figures/v1/Colored**.java**"
       - PROFILE: "a05"
         EXISTS: "src/main/java/assignments/**/v2/**"
       - PROFILE: "a06"
@@ -66,9 +66,13 @@ assignments:
       - PROFILE: "a07"
         EXISTS: "src/main/java/assignments/boxes/v3/**"
       - PROFILE: "a08"
-        EXISTS: "src/main/java/assignments/ttSchool/**"
+        EXISTS: "src/main/java/assignments/ttSchool/Trainee**"
       - PROFILE: "a09"
         EXISTS: "src/main/java/assignments/file/**"
+      - PROFILE: "a10school"
+        EXISTS: "src/main/java/assignments/ttSchool/**"
+      - PROFILE: "a10matrix"
+        EXISTS: "src/main/java/assignments/matrix/**"
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "teacher"'
       when: on_success
