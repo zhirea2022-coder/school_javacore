@@ -1,93 +1,99 @@
-# school_javacore
+# Учебный проект Java Core (Assignments 1–10)
 
+Учебный репозиторий содержит серию из 10 заданий по Java Core: основы синтаксиса, ООП, наследование и интерфейсы, исключения, коллекции и generics, работа с файлами и сериализацией, а также упражнения с наборами и матрицами. Итоговые навыки: уверенная работа с базовыми возможностями Java, понимание структуры Maven-проекта, использование Git, CI и автоматических тестов.
 
+## Структура проекта 📦
 
-## Getting started
+Код организован в пакетах `assignments.*` (переименованный пакет `net.thumbtack.school`). Каждому заданию соответствует свой пакет или версия:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- `assignments.introduction` — задание 1
+- `assignments.figures.v1` — задание 2
+- `assignments.base` — задание 3
+- `assignments.figures.v2` — задание 5
+- `assignments.iface.v2` — задание 5
+- `assignments.misc.v2` — задание 5
+- `assignments.figures.v3` — задание 6
+- `assignments.iface.v3` — задание 6
+- `assignments.colors.v3` — задание 6
+- `assignments.misc.v3` — задание 6
+- `assignments.boxes.v3` — задание 7
+- `assignments.ttschool` — задания 8–10 (Trainee, Group, School, Map, Queue)
+- `assignments.file` — задание 9 (FileService)
+- `assignments.matrix` — задание 10 (MatrixNonSimilarRows)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+Основные каталоги Maven-проекта:
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/zhirea2022-group/school_javacore.git
-git branch -M main
-git push -uf origin main
+src/main/java  — исходный код заданий (именно его нужно менять)
+src/test/java  — автоматические тесты для проверки заданий (не изменяются)
 ```
 
-## Integrate with your tools
+Студент работает только с кодом в `src/main/java`; тестовые классы в `src/test/java` служат для проверки и изменять их не нужно.
 
-- [ ] [Set up project integrations](https://gitlab.com/zhirea2022-group/school_javacore/-/settings/integrations)
+## CI и Maven-профили 🚀
 
-## Collaborate with your team
+Для каждого задания предусмотрен Maven-профиль `a01` … `a10`, который запускает тесты именно этого задания. Даже если CI-конфигурация ещё не добавлена, структура README предполагает её наличие.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+- **Запуск профиля**: `mvn -P a05 test` (пример для задания 5).
+- **Автоматическая проверка**: CI запускает тесты из соответствующего профиля после пуша. При успехе пайплайн становится зелёным, при падении тестов — красным.
+- **assignment.id**: если конфигурация использует переменную `assignment.id`, она указывает, какой профиль должен быть запущен в CI для текущей проверки.
+- **Где лежит конфигурация**: файлы CI (например, `.gitlab-ci.yml` или `.github/workflows/*.yml`) находятся в корне репозитория.
+- **Как понять, что всё прошло**: статус пайплайна/Actions в интерфейсе GitLab/GitHub должен быть успешным (✅). При ошибках можно открыть лог и посмотреть упавшие тесты.
 
-## Test and Deploy
+## Требования к окружению
 
-Use the built-in continuous integration in GitLab.
+- JDK 17 или 21
+- Maven
+- IntelliJ IDEA
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### Как открыть проект в IntelliJ IDEA
+1. Открыть IDEA → *Open* → выбрать корень репозитория.
+2. Дождаться импорта Maven-проекта и индексации.
+3. Убедиться, что выбран JDK 17 или 21 (Project SDK).
 
-***
+## Как выполнять задания
 
-# Editing this README
+Описание каждого задания находится в методичках/документах (добавьте ссылки позже).
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Общий порядок работы:
+1. Открыть пакет `assignments.<…>` с нужным номером задания.
+2. Реализовать требуемые классы и методы.
+3. Запустить тесты (профиль задания или отдельные классы тестов).
+4. Закоммитить изменения и запушить в репозиторий.
+5. Проверить статус CI.
 
-## Suggestions for a good README
+Пример для задания 5:
+- открыть пакет `assignments.figures.v2`;
+- реализовать классы `Figure`, `Rectangle`, `Circle`, `Square`, `Ellipse` и др.;
+- убедиться, что тесты `TestRectangle`, `TestCircle`, `TestTypes` проходят успешно.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+## Запуск тестов 🧪
 
-## Name
-Choose a self-explaining name for your project.
+### В IntelliJ IDEA
+- Можно запускать все тесты сразу (Run All Tests) или отдельные классы `TestXXX` в `src/test/java`.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### Через Maven
+- Команда для конкретного задания: `mvn -P a05 test`.
+- Зелёный цвет/галочки — все тесты пройдены; красный/крестики — есть ошибки, нужно исправить код.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## Полезные материалы 📘 (заполните позже)
+- [Основы Java](#)
+- [ООП и наследование](#)
+- [Коллекции Java](#)
+- [Механизм исключений](#)
+- [Generics](#)
+- [Файлы и сериализация](#)
+- [Алгоритмы работы с матрицами](#)
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+## Советы студентам
+- Не менять тесты в `src/test/java`.
+- Коммитить изменения часто с понятными сообщениями.
+- Запускать тесты перед каждым пушем.
+- Следовать спецификациям задания, избегать лишнего кода.
+- Соблюдать DRY и форматировать код (Ctrl+Alt+L в IDEA).
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## TODO для README
+- [ ] Добавить ссылки на методички
+- [ ] Добавить бейджи CI
+- [ ] Добавить пример вывода тестов
+- [ ] Добавить краткое FAQ
