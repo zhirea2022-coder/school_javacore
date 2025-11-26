@@ -1,0 +1,150 @@
+image: eclipse-temurin:21-jdk
+
+stages: [test, summary]
+
+variables:
+  MAVEN_CLI_OPTS: >-
+    -B -U --no-transfer-progress
+    -Dmaven.repo.local=.m2/repository
+    -Dsurefire.printSummary=true -Dsurefire.useFile=false
+
+cache:
+  key: "$CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG"
+  policy: pull-push
+  paths:
+    - .m2/repository
+
+.assignment:
+  stage: test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+  script:
+    - set -euxo pipefail
+    - ./mvnw -v
+    - ./mvnw ${MAVEN_CLI_OPTS} -P ${PROFILE} verify
+
+    - echo "== Contents of src/test/java (top 50) =="
+    - 'find src/test/java -type f | sed -n "1,50p" || true'
+    - echo "== Surefire reports (if any) =="
+    - 'find target/surefire-reports -maxdepth 1 -type f -name "*.xml" -printf "%f\n" 2>/dev/null || true'
+    - echo "== JaCoCo (if any) =="
+    - 'ls -la target/site/jacoco 2>/dev/null || true'
+
+    - mkdir -p target/surefire-reports target/site/jacoco
+    - |
+      if ! find target/surefire-reports -maxdepth 1 -name "*.xml" -print -quit >/dev/null; then
+        echo '<testsuite name="empty" tests="0" failures="0" errors="0" skipped="0"></testsuite>' \
+          > "target/surefire-reports/EMPTY-${PROFILE}.xml"
+      fi
+  artifacts:
+    when: always
+    reports:
+      junit: "target/surefire-reports/TEST-*.xml"
+    paths:
+      - target/surefire-reports/
+      - target/site/jacoco/
+    expire_in: 1 week
+
+assignments:
+  extends: .assignment
+  parallel:
+    matrix:
+      - PROFILE: "a01"
+        EXISTS: "src/main/java/assignments/introduction/*.java"
+      - PROFILE: "a02"
+        EXISTS: "src/main/java/assignments/figures/v1/*.java"
+      - PROFILE: "a03"
+        EXISTS: "src/main/java/assignments/base/*.java"
+      - PROFILE: "a04"
+        EXISTS: "src/main/java/assignments/figures/v1/Colored**.java"
+      - PROFILE: "a05"
+        EXISTS: "src/main/java/assignments/**/v2/*.java"
+      - PROFILE: "a06"
+        EXISTS: "src/main/java/assignments/**/v3/*.java"
+      - PROFILE: "a07"
+        EXISTS: "src/main/java/assignments/boxes/v3/*.java"
+      - PROFILE: "a08"
+        EXISTS: "src/main/java/assignments/javaschool/Trainee**.java"
+      - PROFILE: "a09"
+        EXISTS: "src/main/java/assignments/file/*.java"
+      - PROFILE: "a10"
+        EXISTS: "src/main/java/assignments/matrix/*.java"
+  rules:
+    - exists:
+        - "$EXISTS"
+      when: on_success
+    - when: never
+
+  before_script:
+    - chmod +x ./mvnw
+
+    - |
+      case "$PROFILE" in
+        "a05")
+          echo "Checking that both figures.v2 and misc.v2 are implemented..."
+          if ! ls src/main/java/assignments/figures/v2/*.java >/dev/null 2>&1; then
+            echo "ERROR: src/main/java/assignments/figures/v2/*.java not found." && exit 1
+          fi
+          if ! ls src/main/java/assignments/misc/v2/*.java >/dev/null 2>&1; then
+            echo "ERROR: src/main/java/assignments/misc/v2/*.java not found." && exit 1
+          fi
+          ;;
+        "a06")
+          echo "Checking that both figures.v3 and misc.v3 are implemented..."
+          if ! ls src/main/java/assignments/figures/v3/*.java >/dev/null 2>&1; then
+            echo "ERROR: src/main/java/assignments/figures/v3/*.java not found." && exit 1
+          fi
+          if ! ls src/main/java/assignments/misc/v3/*.java >/dev/null 2>&1; then
+            echo "ERROR: src/main/java/assignments/misc/v3/*.java not found." && exit 1
+          fi
+          ;;
+        *)
+          echo "No extra checks for PROFILE=$PROFILE"
+          ;;
+      esac
+
+summary:
+  stage: summary
+  image: ubuntu:latest
+  needs:
+    - job: assignments
+      artifacts: true
+      optional: true
+  script:
+    - echo "=== Aggregated Test Summary ==="
+    - ls -R target/surefire-reports/ || echo "Directory not found"
+
+    - |
+      files=$(find target/surefire-reports -name "*.xml" 2>/dev/null | wc -l)
+      echo "Found $files report files."
+
+      if [ "$files" -eq 0 ]; then
+        echo "⚠️ No test reports found. Did any assignment run?"
+        echo "Total tests: 0"
+        exit 0
+      fi
+      
+      tests=$(grep -hoP 'tests="\K[0-9]+'    target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END{print s+0}')
+      fails=$(grep -hoP 'failures="\K[0-9]+' target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END{print s+0}')
+      errors=$(grep -hoP 'errors="\K[0-9]+'   target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END{print s+0}')
+      skipped=$(grep -hoP 'skipped="\K[0-9]+' target/surefire-reports/*.xml 2>/dev/null | awk '{s+=$1} END{print s+0}')
+      
+      passed=$((tests - fails - errors - skipped))
+
+      echo "--------------------------------------------------"
+      echo "Total tests:  $tests"
+      echo "Failures:     $fails"
+      echo "Errors:       $errors"
+      echo "Skipped:      $skipped"
+      echo "Successes:    $passed"
+      echo "--------------------------------------------------"
+
+      if [ "$fails" -gt 0 ] || [ "$errors" -gt 0 ]; then
+        echo "❌ Some tests failed!"
+        exit 1
+      else
+        echo "✅ All tests passed!"
+        exit 0
+      fi
